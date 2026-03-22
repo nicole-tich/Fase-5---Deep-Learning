@@ -117,11 +117,6 @@ O app oferece duas funcionalidades:
 
 ---
 
-## Link com a aplicação final no streamlit:
-[https://fase-5---deep-learning-tndjdhqpsmfy53fbs5znf7.streamlit.app/](https://fase-5---deep-learning-tndjdhqpsmfy53fbs5znf7.streamlit.app/)
-
----
-
 ## Abordagem de Modelagem
 
 | Aspecto | Decisao |
