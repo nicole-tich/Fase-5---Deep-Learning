@@ -85,7 +85,7 @@ with st.sidebar:
     st.markdown(f"**Modelo ativo:** `{MODEL_NAME}`")
     st.markdown(f"**Threshold:** `{THRESHOLD:.2f}`")
     st.divider()
-    st.caption("Passos Mágicos · FIAP Datathon 2024")
+    st.caption("Passos Mágicos · FIAP Datathon 2026")
 
 
 # ══════════════════ PREDIÇÃO INDIVIDUAL ═══════════════════════════════════════

@@ -1,58 +1,59 @@
-# 🎓 Passos Mágicos — Preditor de Risco de Defasagem Escolar
+# Passos Mágicos — Preditor de Risco de Defasagem Escolar
 
-> **FIAP Pós-Graduação em Data Analytics · Fase 5 — Datathon**
+**FIAP Pos-Graduacao em Data Analytics · Fase 5 — Datathon**
 
-Solução completa de análise de dados e Machine Learning para a associação educacional **Passos Mágicos**, com o objetivo de identificar antecipadamente alunos em risco de defasagem escolar com base em indicadores pedagógicos e psicossociais.
+Solucao de analise de dados e Machine Learning para a associacao educacional **Passos Magicos**, com o objetivo de identificar antecipadamente alunos em risco de defasagem escolar com base em indicadores pedagogicos e psicossociais.
 
 ---
 
-## 📌 Problema
+## Problema
 
-A Passos Mágicos acompanha anualmente centenas de alunos em situação de vulnerabilidade por meio de indicadores como INDE, IAN, IDA, IEG, IAA, IPS, IPP e IPV. O desafio consiste em:
+A Passos Magicos acompanha anualmente centenas de alunos em situacao de vulnerabilidade por meio de indicadores como INDE, IAN, IDA, IEG, IAA, IPS, IPP e IPV. O desafio consiste em:
 
-1. Responder **11 questões de negócio** sobre o perfil e a evolução dos alunos (2020–2024)
-2. Construir um **modelo preditivo** para identificar alunos em risco de defasagem (IAN ≤ 5) antes que a situação se agrave
+1. Responder **10 questoes de negocio** sobre o perfil e a evolucao dos alunos (2022–2024)
+2. Construir um **modelo preditivo** para identificar alunos em risco de defasagem (IAN <= 5) antes que a situacao se agrave
 3. Disponibilizar os resultados por meio de um **aplicativo interativo**
 
 ---
 
-## 🗂️ Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 .
 ├── Datathon_FIAP_Fase_5.ipynb   # Notebook principal: EDA + ML
-├── utils_pm.py                  # Módulo de pré-processamento compartilhado
+├── utils_pm.py                  # Modulo de pre-processamento compartilhado
 ├── app.py                       # Aplicativo Streamlit
+├── modelagem_preditiva.md       # Documentacao da abordagem de modelagem
 ├── requirements.txt
 ├── .streamlit/
-│   └── config.toml              # Tema da aplicação
+│   └── config.toml              # Tema da aplicacao
 ├── dados/
-│   └── processado/              # Dados gerados pelo notebook
+│   └── processado/              # Dados e imagens gerados pelo notebook
 ├── modelo/                      # Artefatos do modelo (gerados pelo notebook)
 │   ├── modelo_passos_magicos.pkl
 │   ├── config_passos_magicos.pkl
 │   └── feature_names.pkl
-└── .env                         # Configuração de caminhos
+└── .env                         # Configuracao de caminhos
 ```
 
 ---
 
-## ⚙️ Configuração do Ambiente
+## Configuracao do Ambiente
 
-### 1. Clonar o repositório
+### 1. Clonar o repositorio
 
 ```bash
 git clone https://github.com/seu-usuario/seu-repo.git
 cd seu-repo
 ```
 
-### 2. Instalar dependências
+### 2. Instalar dependencias
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configurar variáveis de ambiente
+### 3. Configurar variaveis de ambiente
 
 Crie um arquivo `.env` na raiz do projeto:
 
@@ -62,26 +63,29 @@ MODELS=modelo
 PROCESSED=dados/processado
 ```
 
-### 4. Criar pastas necessárias
+### 4. Criar pastas necessarias
 
 ```bash
-mkdir -p dados/processado modelo
+mkdir dados/processado modelo
 ```
 
 ---
 
-## 📓 Executando o Notebook
+## Executando o Notebook
 
-Abra `Datathon_FIAP_Fase_5.ipynb` e execute célula a célula:
+Abra `Datathon_FIAP_Fase_5.ipynb` e execute as celulas em ordem:
 
-- **Células 1–9**: Análise Exploratória respondendo as 11 questões de negócio
-- **Células 10–15**: Pipeline de Machine Learning, avaliação e exportação dos artefatos
+- **Secao 1**: Setup, carregamento e inspecao dos dados brutos
+- **Secao 2**: Analise Exploratoria (EDA) respondendo as 10 questoes de negocio
+- **Secao 3**: Engenharia de features e preparacao para modelagem
+- **Secao 4**: Treinamento, validacao cruzada e avaliacao dos modelos
+- **Secao 5**: Exportacao dos artefatos (`.pkl`) para uso no aplicativo
 
-O notebook gera automaticamente os arquivos em `modelo/` necessários para o app.
+O notebook gera automaticamente os arquivos em `modelo/` necessarios para o app.
 
 ---
 
-## 🚀 Executando o Aplicativo Localmente
+## Executando o Aplicativo Localmente
 
 ```bash
 streamlit run app.py
@@ -89,17 +93,21 @@ streamlit run app.py
 
 Acesse `http://localhost:8501` no navegador.
 
+O app oferece duas funcionalidades:
+- **Predicao Individual**: preenchimento manual dos indicadores de um aluno para obtencao imediata do risco
+- **Analise em Lote**: upload de arquivo Excel ou CSV com multiplos alunos para predicao em massa
+
 ---
 
-## ☁️ Deploy no Streamlit Community Cloud
+## Deploy no Streamlit Community Cloud
 
-1. Faça push do repositório para o GitHub
+1. Faca push do repositorio para o GitHub (incluindo os arquivos `.pkl` em `modelo/`)
 2. Acesse [share.streamlit.io](https://share.streamlit.io)
-3. Clique em **New app** e conecte ao seu repositório
+3. Clique em **New app** e conecte ao repositorio
 4. Defina:
    - **Branch**: `main`
    - **Main file path**: `app.py`
-5. Em **Advanced settings → Secrets**, adicione:
+5. Em **Advanced settings > Secrets**, adicione:
    ```toml
    DATA_PATH = "dados/PEDE_PASSOS_DATASET_FIAP.xlsx"
    MODELS = "modelo"
@@ -107,56 +115,56 @@ Acesse `http://localhost:8501` no navegador.
    ```
 6. Clique em **Deploy**
 
-> **Nota**: Para o app funcionar no Cloud, você precisará incluir os arquivos `.pkl` em `modelo/` ou ajustar o pipeline para treinar na inicialização.
-
 ---
 
-## 🧠 Abordagem de Modelagem
+## Abordagem de Modelagem
 
-| Aspecto | Decisão |
+| Aspecto | Decisao |
 |---|---|
-| **Alvo** | `risco_defasagem = 1` se `IAN ≤ 5` |
-| **Split temporal** | Treino: anos < 2024 · Teste: ano == 2024 |
-| **Modelos avaliados** | Logistic Regression, Random Forest, Gradient Boosting, LightGBM |
-| **Pré-processamento** | SimpleImputer (mediana) + StandardScaler · flags de valores faltantes |
-| **Features derivadas** | `std_notas`, `risco_psico`, `delta_inde`, `evolucao_inde_pct` |
-| **Threshold** | Otimizado por F-beta (β=2) — prioriza recall para não perder alunos em risco |
-| **Validação** | StratifiedKFold 5 folds · métricas: ROC AUC, PR AUC, F-beta |
+| **Variavel alvo** | `risco_defasagem = 1` se `IAN <= 5`, `0` caso contrario |
+| **Divisao treino/teste** | `train_test_split` estratificado — 70% treino, 30% teste |
+| **Modelos comparados** | Logistic Regression, Random Forest, SVC (kernel RBF) |
+| **Modelo final** | Logistic Regression |
+| **Pre-processamento** | `SimpleImputer` (mediana) + `StandardScaler` para numericas; `OneHotEncoder` para categoricas |
+| **Threshold de decisao** | Fixo em 0.40 — prioriza identificacao de casos em risco |
+| **Validacao** | `StratifiedKFold` com 5 folds · metricas: ROC AUC, PR AUC, Acuracia |
+
+Para detalhamento completo da metodologia de modelagem, consulte [`modelagem_preditiva.md`](modelagem_preditiva.md).
 
 ---
 
-## 📊 Questões de Negócio Respondidas
+## Questoes de Negocio Respondidas
 
-1. **Q1** — Perfil do estudante com defasagem (IAN ≤ 5)
-2. **Q2** — Evolução do IDA ao longo dos anos
-3. **Q3** — Correlação entre IEG, IDA e IPV
-4. **Q4** — Relação entre IAA e desempenho acadêmico
-5. **Q5** — Distribuição do IPS por fase
-6. **Q6** — Impacto do IPP no risco de defasagem
-7. **Q7** — Fatores correlacionados com o IPV
-8. **Q8** — Composição multidimensional do INDE
-9. *(Q9 explorada dentro de Q8)*
-10. **Q10** — Efetividade do programa por classificação Pedra
-11. **Q11** — Insights adicionais (gênero, variância de notas, evolução INDE)
+| # | Pergunta |
+|---|----------|
+| Q1 | Perfil do estudante com defasagem (IAN <= 5) |
+| Q2 | Evolucao do desempenho academico (IDA) ao longo dos anos |
+| Q3 | Correlacao entre engajamento (IEG), desempenho (IDA) e ponto de virada (IPV) |
+| Q4 | Relacao entre autoavaliacao (IAA) e desempenho academico |
+| Q5 | Padroes de IPS que antecedem quedas de desempenho e engajamento |
+| Q6 | Relacao entre IPP e adequacao de nivel (IAN) |
+| Q7 | Comportamentos e indicadores que mais influenciam o IPV |
+| Q8 | Combinacoes de indicadores que elevam o INDE |
+| Q9 | Modelo preditivo de risco de defasagem |
+| Q10 | Efetividade do programa por nivel de classificacao (Pedra) |
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
-- **Python** 3.9+
-- **Pandas / NumPy** — manipulação de dados
-- **Scikit-learn** — pipeline de ML
-- **LightGBM** — modelo de gradient boosting
-- **Matplotlib / Seaborn** — visualizações
+- **Python 3.9+**
+- **Pandas / NumPy** — manipulacao e transformacao de dados
+- **Scikit-learn** — pipeline de pre-processamento e modelagem
+- **Matplotlib / Seaborn** — visualizacoes estatisticas
 - **Streamlit** — aplicativo web interativo
-- **Joblib** — serialização de artefatos
+- **Joblib** — serializacao dos artefatos do modelo
 
 ---
 
-## ⚠️ Aviso Ético
+## Aviso Etico
 
-Este modelo é uma **ferramenta de apoio pedagógico** e não substitui a avaliação qualitativa de educadores e psicólogos. As predições devem ser utilizadas como sinal de alerta inicial, sempre complementadas pelo olhar humano especializado.
+Este modelo e uma ferramenta de apoio pedagogico e nao substitui a avaliacao qualitativa de educadores e psicologos. As predicoes devem ser utilizadas como sinal de alerta inicial, sempre complementadas pelo julgamento humano especializado.
 
 ---
 
-*Desenvolvido por Nicole Tometich e Giovanni Gerodo · FIAP Pós-Graduação em Data Analytics · 2024*
+*Desenvolvido por Nicole Tometich e Giovanni Gerodo · FIAP Pos-Graduacao em Data Analytics · 2024*
