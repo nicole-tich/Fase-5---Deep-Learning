@@ -100,7 +100,12 @@ if aba == "📋 Predição Individual":
             st.markdown("**👤 Dados do Aluno**")
             genero     = st.selectbox("Gênero", ["masculino", "feminino"])
             idade      = st.slider("Idade", 6, 30, 14)
-            fase_ideal = st.number_input("Fase Ideal", 0.0, 8.0, 3.0, step=1.0)
+            fase_ideal = st.slider(
+                "Fase Atual (1–8)",
+                min_value=1, max_value=8, value=6,
+                help="Fase em que o aluno está classificado no programa (1 = iniciante, 8 = avançado). "
+                     "Para referência: alunos de 14 anos costumam estar na Fase 6–7.",
+            )
 
         with c2:
             st.markdown("**📚 Notas Acadêmicas (0–10)**")
@@ -119,12 +124,11 @@ if aba == "📋 Predição Individual":
         c4, c5 = st.columns(2)
         with c4:
             st.markdown("**📈 Histórico INDE**")
-            inde_2022 = st.number_input("INDE 2022", 0.0, 10.0, 6.0, step=0.01)
-            inde_2023 = st.number_input("INDE 2023", 0.0, 10.0, 6.5, step=0.01)
+            inde_2023 = st.slider("INDE 2023", 0.0, 10.0, 6.5, step=0.1)
         with c5:
             st.markdown("**🔍 Outros Indicadores**")
-            ida = st.number_input("IDA (Desempenho Acad.)",    0.0, 10.0, 6.0, step=0.01)
-            ipv = st.number_input("IPV (Ponto de Virada)",     0.0, 10.0, 5.0, step=0.01)
+            ida  = st.slider("IDA (Desempenho Acad.)", 0.0, 10.0, 6.0, step=0.1)
+            ipv  = st.slider("IPV (Ponto de Virada)",  0.0, 10.0, 6.0, step=0.1)
             n_av = st.number_input("Nº de Avaliações", 1, 10, 3, step=1)
 
         submitted = st.form_submit_button("🔍 Analisar Risco", type="primary", use_container_width=True)
@@ -134,7 +138,7 @@ if aba == "📋 Predição Individual":
             "genero": genero, "idade": float(idade), "fase_ideal": float(fase_ideal),
             "mat": mat, "por": por, "ing": ing,
             "iaa": iaa, "ieg": ieg, "ips": ips, "ipp": ipp,
-            "inde_2022": inde_2022, "inde_2023": inde_2023,
+            "inde_2023": inde_2023,
             "ida": ida, "ipv": ipv, "n_av": float(n_av),
         }
 

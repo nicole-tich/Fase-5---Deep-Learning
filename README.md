@@ -125,8 +125,10 @@ O app oferece duas funcionalidades:
 | **Divisao treino/teste** | `train_test_split` estratificado — 70% treino, 30% teste |
 | **Modelos comparados** | Logistic Regression, Random Forest, SVC (kernel RBF) |
 | **Modelo final** | Logistic Regression |
+| **Features** | `genero`, `idade`, `fase_ideal`, `mat`, `por`, `ing`, `iaa`, `ieg`, `ips`, `ipp`, `ida`, `ipv`, `inde_2023`, `n_av`, `media_academica`, `std_notas`, `media_comportamental`, `risco_psico`, `miss_iaa`, `miss_ieg`, `miss_ips`, `miss_ipp`, `miss_ida`, `miss_ipv` (24 features) |
 | **Pre-processamento** | `SimpleImputer` (mediana) + `StandardScaler` para numericas; `OneHotEncoder` para categoricas |
 | **Threshold de decisao** | Fixo em 0.40 — prioriza identificacao de casos em risco |
+| **Zonas de risco** | Alto (>= 40%), Moderado (36-39%), Baixo (< 36%) |
 | **Validacao** | `StratifiedKFold` com 5 folds · metricas: ROC AUC, PR AUC, Acuracia |
 
 Para detalhamento completo da metodologia de modelagem, consulte [`modelagem_preditiva.md`](modelagem_preditiva.md).

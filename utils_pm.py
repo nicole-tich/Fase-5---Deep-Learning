@@ -43,6 +43,11 @@ def extrair_fase_col(s: pd.Series) -> pd.Series:
     def _parse(v):
         if pd.isna(v):
             return np.nan
+        # Se já for numérico, retorna direto
+        try:
+            return float(v)
+        except (ValueError, TypeError):
+            pass
         v = str(v).lower()
         if "alfa" in v:
             return 0.0
@@ -85,6 +90,10 @@ def limpar_base(df: pd.DataFrame) -> pd.DataFrame:
     if "inde_2024" in d.columns:
         tmp = d["inde_2024"].astype(str).str.strip().str.upper()
         d["inde_2024"] = pd.to_numeric(tmp.replace("INCLUIR", np.nan), errors="coerce")
+
+    # Padronizar nomes de colunas de notas (dataset usa nomes longos em alguns anos)
+    rename_map = {"matem": "mat", "portug": "por", "ingles": "ing"}
+    d = d.rename(columns={k: v for k, v in rename_map.items() if k in d.columns and v not in d.columns})
 
     return d
 
@@ -131,6 +140,26 @@ def criar_features_derivadas(df: pd.DataFrame) -> pd.DataFrame:
 
 # ─── Preparação completa ──────────────────────────────────────────────────────
 
+# ─── Features explícitas do modelo ─────────────────────────────────────────
+# Apenas estas colunas são usadas no treino e na inferência do app.
+# Qualquer outra coluna presente no dataset bruto é descartada.
+FEATURES_MODELO = [
+    # Dados do aluno
+    "genero", "idade", "fase_ideal",
+    # Notas acadêmicas
+    "mat", "por", "ing",
+    # Indicadores pedagógicos e psicossociais
+    "iaa", "ieg", "ips", "ipp", "ida", "ipv",
+    # Histórico INDE (apenas 2023 presente no dataset consolidado)
+    "inde_2023",
+    # Outros
+    "n_av",
+    # Features derivadas
+    "media_academica", "std_notas", "media_comportamental",
+    "risco_psico",
+    "miss_iaa", "miss_ieg", "miss_ips", "miss_ipp", "miss_ida", "miss_ipv",
+]
+
 COLUNAS_REMOVER = [
     "ra", "nome", "data_nasc", "escola",
     "avaliador_1", "avaliador_2", "avaliador_3",
@@ -160,9 +189,10 @@ def preparar_features(df: pd.DataFrame, modo_treino: bool) -> pd.DataFrame:
             raise ValueError("Coluna 'ian' necessária para criar o target.")
         d["risco_defasagem"] = (coerce_num(d["ian"]) <= 5).astype(int)
 
-    # Remover colunas de vazamento e não preditivas
-    remover = [c for c in COLUNAS_REMOVER + ["ian", "defasagem"] if c in d.columns]
-    d = d.drop(columns=remover, errors="ignore")
+    # Selecionar apenas as features explícitas do modelo
+    features_presentes = [f for f in FEATURES_MODELO if f in d.columns]
+    colunas_finais = features_presentes + (["risco_defasagem"] if modo_treino and "risco_defasagem" in d.columns else [])
+    d = d[colunas_finais]
 
     return d
 
@@ -224,13 +254,13 @@ def classificar_risco(prob: float, threshold: float) -> dict:
                 "psicossocial intensificados. Reavaliar em 30 dias."
             ),
         }
-    elif prob >= threshold * 0.7:
+    elif prob >= threshold * 0.9:  # dentro de 10% do limiar → atenção
         return {
             "label": "🟡 RISCO MODERADO",
             "cor": "warning",
             "recomendacao": (
-                "Monitorar de perto os indicadores de engajamento e desempenho. "
-                "Considerar reforço preventivo."
+                "Indicadores próximos ao limiar de risco. Monitorar engajamento "
+                "e desempenho nas próximas avaliações."
             ),
         }
     else:
