@@ -10,7 +10,7 @@ Solucao de analise de dados e Machine Learning para a associacao educacional **P
 
 A Passos Magicos acompanha anualmente centenas de alunos em situacao de vulnerabilidade por meio de indicadores como INDE, IAN, IDA, IEG, IAA, IPS, IPP e IPV. O desafio consiste em:
 
-1. Responder **10 questoes de negocio** sobre o perfil e a evolucao dos alunos (2022–2024)
+1. Responder **10 questoes de negocio** sobre o perfil e a evolucao dos alunos (2022–2024) - documento anexo ao trabalho
 2. Construir um **modelo preditivo** para identificar alunos em risco de defasagem (IAN <= 5) antes que a situacao se agrave
 3. Disponibilizar os resultados por meio de um **aplicativo interativo**
 
@@ -124,7 +124,7 @@ O app oferece duas funcionalidades:
 | **Variavel alvo** | `risco_defasagem = 1` se `IAN <= 5`, `0` caso contrario |
 | **Divisao treino/teste** | `train_test_split` estratificado — 70% treino, 30% teste |
 | **Modelos comparados** | Logistic Regression, Random Forest, SVC (kernel RBF) |
-| **Modelo final** | Logistic Regression |
+| **Modelo final** | Random Forest (`n_estimators=300`, `class_weight="balanced_subsample"`) |
 | **Features** | `genero`, `idade`, `fase_ideal`, `mat`, `por`, `ing`, `iaa`, `ieg`, `ips`, `ipp`, `ida`, `ipv`, `inde_2023`, `n_av`, `media_academica`, `std_notas`, `media_comportamental`, `risco_psico`, `miss_iaa`, `miss_ieg`, `miss_ips`, `miss_ipp`, `miss_ida`, `miss_ipv` (24 features) |
 | **Pre-processamento** | `SimpleImputer` (mediana) + `StandardScaler` para numericas; `OneHotEncoder` para categoricas |
 | **Threshold de decisao** | Fixo em 0.40 — prioriza identificacao de casos em risco |
@@ -132,23 +132,6 @@ O app oferece duas funcionalidades:
 | **Validacao** | `StratifiedKFold` com 5 folds · metricas: ROC AUC, PR AUC, Acuracia |
 
 Para detalhamento completo da metodologia de modelagem, consulte [`modelagem_preditiva.md`](modelagem_preditiva.md).
-
----
-
-## Questoes de Negocio Respondidas
-
-| # | Pergunta |
-|---|----------|
-| Q1 | Perfil do estudante com defasagem (IAN <= 5) |
-| Q2 | Evolucao do desempenho academico (IDA) ao longo dos anos |
-| Q3 | Correlacao entre engajamento (IEG), desempenho (IDA) e ponto de virada (IPV) |
-| Q4 | Relacao entre autoavaliacao (IAA) e desempenho academico |
-| Q5 | Padroes de IPS que antecedem quedas de desempenho e engajamento |
-| Q6 | Relacao entre IPP e adequacao de nivel (IAN) |
-| Q7 | Comportamentos e indicadores que mais influenciam o IPV |
-| Q8 | Combinacoes de indicadores que elevam o INDE |
-| Q9 | Modelo preditivo de risco de defasagem |
-| Q10 | Efetividade do programa por nivel de classificacao (Pedra) |
 
 ---
 
@@ -169,4 +152,4 @@ Este modelo e uma ferramenta de apoio pedagogico e nao substitui a avaliacao qua
 
 ---
 
-*Desenvolvido por Nicole Tometich e Giovanni Gerodo · FIAP Pos-Graduacao em Data Analytics · 2024*
+*Desenvolvido por Nicole Tometich e Giovanni Gerodo · FIAP Pos-Graduacao em Data Analytics · 2026*

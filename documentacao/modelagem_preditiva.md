@@ -87,17 +87,17 @@ O modelo com maior ROC AUC no teste e selecionado automaticamente como modelo fi
 
 ---
 
-## Modelo Final: Logistic Regression
+## Modelo Final: Random Forest
 
-A Regressao Logistica foi o modelo com melhor desempenho geral no conjunto de teste, e e tambem o mais adequado para este contexto pelas razoes abaixo.
+O Random Forest foi o modelo com melhor desempenho geral no conjunto de teste (maior ROC AUC), sendo selecionado automaticamente pelo notebook como modelo final.
 
-### Por que Logistic Regression
+### Por que Random Forest
 
-**Interpretabilidade.** Os coeficientes fornecem uma medida direta do impacto de cada indicador sobre o risco de defasagem, permitindo que educadores entendam e justifiquem as predições com base em evidências quantificáveis.
+**Robustez a outliers e valores ausentes.** O ensemble de arvores de decisao lida naturalmente com distribuicoes assimétricas e com a mistura de variaveis numericas e categoricas comum em dados educacionais.
 
-**Robustez com Dados Limitados.** Com centenas de registros por ano, modelos complexos (Random Forest, SVC) tendem a overfitting. A Regressão Logística, sendo linear, oferece melhor generalização e menor variância em amostras reduzidas.
+**Captacao de interacoes nao-lineares.** Indicadores como fase_ideal, IDA e IPV interagem de forma nao-linear no perfil de risco; o Random Forest captura essas interacoes sem necessidade de engenharia manual de features.
 
-**Eficiência e Calibração.** Alcança desempenho equivalente aos modelos complexos no teste, com tempo de treinamento negligenciável e output naturalmente interpretado como probabilidade, facilitando ajuste do threshold e deployment em ambientes com recursos limitados.
+**Estabilidade em Dados Desbalanceados.** Com `class_weight="balanced_subsample"`, cada arvore e treinada em uma amostra rebalanceada, reduzindo o vies em favor da classe majoritaria e mantendo alto recall para os casos de risco.
 
 
 ---
@@ -116,7 +116,7 @@ O app classifica as predicoes em tres zonas:
 | Risco Moderado | 36% a 39% (dentro de 10% do limiar) | Monitoramento proximo nas proximas avaliacoes |
 | Baixo Risco | < 36% | Acompanhamento padrao |
 
-A zona moderada e propositalmente estreita (4 pontos percentuais) para evitar falsos alarmes em alunos claramente saudaveis. O uso de `class_weight="balanced"` faz com que a probabilidade base do modelo seja deslocada para cima em relacao a 50%, e a escala interpretavel e 0-40% (baixo) e nao 0-50%.
+A zona moderada e propositalmente estreita (4 pontos percentuais) para evitar falsos alarmes em alunos claramente saudaveis. O uso de `class_weight="balanced_subsample"` faz com que a probabilidade base do modelo seja deslocada para cima em relacao a 50%, e a escala interpretavel e 0-40% (baixo) e nao 0-50%.
 
 ---
 
